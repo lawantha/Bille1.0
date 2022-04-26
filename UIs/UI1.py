@@ -10,6 +10,10 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from Packages import main
+
+date= main.time(datee='')
+print(date)
 
 class Ui_Billie(object):
     def setupUi(self, Billie):
@@ -179,7 +183,7 @@ class Ui_Billie(object):
 "<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt; font-weight:600; color:#ffffff;\">After 10 minute you have to take a brake</span></p></body></html>"))
         self.label_4.setText(_translate("Billie", "Happy"))
         self.label_5.setText(_translate("Billie", "Working time -"))
-        self.label_6.setText(_translate("Billie", "10 min"))
+        self.label_6.setText(_translate("Billie", "11 min"))
         self.label_7.setText(_translate("Billie", "Text input"))
         self.menuMenu.setTitle(_translate("Billie", "Menu"))
         self.menuReminders.setTitle(_translate("Billie", "Reminders"))
@@ -188,7 +192,7 @@ class Ui_Billie(object):
         self.actionSettings.setText(_translate("Billie", "Settings"))
 
 
-if __name__ == "__main__":
+def main():
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Billie = QtWidgets.QMainWindow()
@@ -196,3 +200,6 @@ if __name__ == "__main__":
     ui.setupUi(Billie)
     Billie.show()
     sys.exit(app.exec_())
+
+if __name__ == "__main__":
+    main()

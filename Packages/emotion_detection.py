@@ -11,14 +11,14 @@ from keras.models import  load_model
 #import matplotlib.pyplot as plt
 
 # load model
-model = load_model('Models/trained_model_csv.h5')
+model = load_model('../Models/trained_model_csv.h5')
 
 # cascade file for face detection
 face_haar_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
 
 # get video from web cam
-cap = cv2.VideoCapture('emotions.mp4')
+cap = cv2.VideoCapture('../emotions.mp4')
 
 #loop for capture all frames
 while True:
@@ -50,19 +50,25 @@ while True:
     gray_img = cv2.cvtColor(flip_img, cv2.COLOR_BGR2GRAY)
 
     faces_detected = face_haar_cascade.detectMultiScale(gray_img, 1.32, 5)
-
+    # emotions = ('anger', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'natural')
     for (x, y, w, h) in faces_detected:
         cv2.rectangle(flip_img, (x, y), (x + w, y + h), (255, 0, 0), thickness=3)
-        roi_gray = gray_img[y:y + w, x:x + h]  # cropping region of interest i.e. face area from  image
-        roi_gray = cv2.resize(roi_gray, (48, 48))
-        img_pixels = image.img_to_array(roi_gray)
-        img_pixels = np.expand_dims(img_pixels, axis=0)
-        img_pixels /= 255
+        face = gray_img[y:y + w, x:x + h]  # cropping region of interest i.e. face area from  image
+        resize = cv2.resize(face, (48, 48))
+        # img_pixels = image.img_to_array(resize)
+        # img_pixels = np.expand_dims(img_pixels, axis=0)
+        # img_pixels /= 255
+        normalize = resize/255.0
+        reshape = np.reshape(normalize,(1,48,48,1))
+        result = model.predict(reshape)
+        label = np.argmax(result, axis=1)[0]
+        print (label)
 
-        predictions = model.predict(img_pixels)
+
+        # predictions = model.predict(img_pixels)
 
         # find max indexed array
-        max_index = np.argmax(predictions[0])
+        # max_index = np.argmax(predictions[0])
 
         #model_old_rgb
         #emotions = ('angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral')
@@ -70,9 +76,9 @@ while True:
         #emotions = {0 : 'angry', 1 : 'disgust', 2 : 'fear', 3 : 'happy', 4 : 'neutral', 5 : 'sad', 6 : 'surprise'}
         #model_csv
         emotions = ('anger', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'natural')
-        predicted_emotion = emotions[max_index]
+        # predicted_emotion = emotions[max_index]
 
-        cv2.putText(flip_img, predicted_emotion, (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+        cv2.putText(flip_img, emotions[label], (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
     resized_img = cv2.resize(flip_img, (1000, 700))
     cv2.imshow('Facial emotion analysis', resized_img)
