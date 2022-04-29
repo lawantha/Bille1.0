@@ -6,7 +6,11 @@ import urllib
 from playsound import playsound
 from datetime import datetime
 from urllib.request import urlretrieve
-from UIs import UI1
+from PyQt5.uic import loadUi
+from PyQt5.QtWidgets import QDialog
+# from UIs import UI1
+
+name = 'lawantha'
 
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
@@ -31,7 +35,7 @@ for n in range(0,4):
 
 print (sum)
 
-def time(datee):
+def time():
     lookup = {
         '01': 'st',
         '21': 'st',
@@ -56,9 +60,13 @@ def is_internet():
         print('internet error')
         return False
 
+class UI_1(QDialog):
+    def __init__(self):
+        super(UI_1, self).__init__()
+        loadUi("../UIs/UI_1.ui", self)
 
 
 if __name__ == "__main__":
     is_internet()
     play_sound()
-    UI1.main()
+    # UI1.main()
