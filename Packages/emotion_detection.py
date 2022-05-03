@@ -18,7 +18,7 @@ face_haar_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_f
 
 
 # get video from web cam
-cap = cv2.VideoCapture('../emotions.mp4')
+cap = cv2.VideoCapture(1)
 
 #loop for capture all frames
 while True:
@@ -81,9 +81,11 @@ while True:
         cv2.putText(flip_img, emotions[label], (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
     resized_img = cv2.resize(flip_img, (1000, 700))
+
     cv2.imshow('Facial emotion analysis', resized_img)
     if cv2.waitKey(10) == ord('q'):  # wait until 'q' key is pressed
         break
+
 
 cap.release()
 cv2.destroyAllWindows

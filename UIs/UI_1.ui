@@ -41,14 +41,17 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <widget class="QLabel" name="video_lable">
+   <widget class="QLabel" name="video_label">
     <property name="geometry">
      <rect>
-      <x>550</x>
+      <x>520</x>
       <y>30</y>
-      <width>141</width>
-      <height>141</height>
+      <width>201</width>
+      <height>151</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
      <string/>
@@ -59,12 +62,15 @@
     <property name="scaledContents">
      <bool>true</bool>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QLabel" name="name_lable">
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>180</y>
+      <x>570</x>
+      <y>240</y>
       <width>91</width>
       <height>21</height>
      </rect>
@@ -216,10 +222,10 @@ font: 75 12pt &quot;MS Shell Dlg 2&quot;;</string>
    <widget class="QWidget" name="horizontalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>209</y>
-      <width>160</width>
-      <height>71</height>
+      <x>539</x>
+      <y>279</y>
+      <width>161</width>
+      <height>51</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -259,10 +265,10 @@ font: 75 16pt &quot;MS Shell Dlg 2&quot;;</string>
    <widget class="QWidget" name="horizontalLayoutWidget_3">
     <property name="geometry">
      <rect>
-      <x>540</x>
-      <y>289</y>
-      <width>197</width>
-      <height>71</height>
+      <x>506</x>
+      <y>329</y>
+      <width>231</width>
+      <height>51</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -285,6 +291,9 @@ font: 75 14pt &quot;MS Shell Dlg 2&quot;;</string>
        </property>
        <property name="text">
         <string>10 min</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
@@ -338,9 +347,19 @@ font: 75 14pt &quot;MS Shell Dlg 2&quot;;</string>
      </item>
     </layout>
    </widget>
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>192</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
    <zorder>label_8</zorder>
    <zorder>label_9</zorder>
-   <zorder>video_lable</zorder>
+   <zorder>video_label</zorder>
    <zorder>name_lable</zorder>
    <zorder>textBrowser</zorder>
    <zorder>horizontalLayoutWidget</zorder>
@@ -348,6 +367,7 @@ font: 75 14pt &quot;MS Shell Dlg 2&quot;;</string>
    <zorder>horizontalLayoutWidget_3</zorder>
    <zorder>label_10</zorder>
    <zorder>horizontalLayoutWidget_4</zorder>
+   <zorder>comboBox</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
