@@ -4,9 +4,12 @@ import pyttsx3
 import pywhatkit
 import datetime
 import wikipedia
+from numpy import source
 from playsound import playsound
 from urllib.request import urlretrieve
 from gtts import gTTS
+
+from UIs.UI_1 import Ui_Billie
 from functions import getAudio
 
 listener = sr.Recognizer()
@@ -34,8 +37,9 @@ def print_command(comm):
 #get command from user
 def getCommand():
     try:
-        command= getAudio()
+        command, mg = getAudio()
         print(command)
+        print(mg)
 
         if 'billi' in command:
             #talk(command)

@@ -12,12 +12,15 @@ import numpy as np
 from keras.models import  load_model
 from pygrabber.dshow_graph import FilterGraph
 
+from UIs.UI_1 import Ui_Billie
 
+UI = Ui_Billie
 
 class UI1_Dialog(QMainWindow):
     def __init__(self):
-        super(UI1_Dialog, self).__init__()
-        loadUi("../UIs/UI_1.ui", self)
+        super().__init__()
+        # loadUi("../UIs/UI_1.ui", self)
+        UI.setupUi(self)
         print('open UI1')
         # self.video()
         a = threading.Thread(target=self.emotion_detection)
@@ -29,22 +32,22 @@ class UI1_Dialog(QMainWindow):
         # # set timer timeout callback function
         # self.timer.timeout.connect(self.video)
         graph = FilterGraph()
-        self.comboBox.addItems(graph.get_input_devices())
+        UI.comboBox.addItems(graph.get_input_devices())
         print(graph.get_input_devices())
-        self.comboBox.currentIndexChanged.connect(self.selectionchange)
+        UI.comboBox.currentIndexChanged.connect(self.selectionchange)
 
     # Update time
     def date(self):
         while True:
             date = datetime.now().strftime("%d/%m/%Y        %H:%M:%S")
             time_ = datetime.now().strftime("%H:%M:%S")
-            self.date_label.setText(date)
+            UI.date_label.setText(date)
             print(date)
             time.sleep(1)
 
     #select camera
     def selectionchange(self):
-        i=self.comboBox.currentIndex()
+        i=UI.comboBox.currentIndex()
         print("Current index",i,"selection changed ",self.comboBox.currentText())
 
     def emotion_detection(self):
@@ -117,7 +120,7 @@ class UI1_Dialog(QMainWindow):
             # create QImage from image
             qImg = QImage(flip_img.data, width, height, step, QImage.Format_RGB888)
             # show image in label
-            self.video_label.setPixmap(QPixmap.fromImage(qImg))
+            UI.video_label.setPixmap(QPixmap.fromImage(qImg))
 
         # cap.release()
         # cv2.destroyAllWindows
@@ -145,6 +148,8 @@ class UI1_Dialog(QMainWindow):
     #
     #     cap.release()
     #     cv2.destroyAllWindows()
+
+
 
 
 if __name__ == "__main__":
