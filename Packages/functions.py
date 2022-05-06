@@ -1,19 +1,19 @@
 import urllib
 from datetime import datetime
-from urllib.request import urlretrieve
-import speech_recognition as sr
+# import pyaudio
 import pyttsx3
 import pywhatkit
+# from urllib.request import urlretrieve
+import speech_recognition as sr
 import wikipedia
 from playsound import playsound
-from gtts import gTTS
 
 listener = sr.Recognizer()
 engine = pyttsx3.init(driverName='sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
 engine.setProperty('rate', 150)
-print('---------internet connected')
+
 # check for internet
 # from numpy.lib.utils import source
 
@@ -21,11 +21,12 @@ print('---------internet connected')
 def is_internet():
     try:
         urllib.request.urlopen('https://google.com', timeout=1)
+        print('---------internet connected')
         return True
     except urllib.request.URLError:
         print('---------internet error_function')
         return False
-
+is_internet()
 # if is_internet():
 #     import speech_recognition as sr
 #     import pyttsx3
@@ -47,7 +48,7 @@ def is_internet():
 
 #convert text to audio
 def talk(text):
-    print('---------Converting text to audio')
+    print('Converting text to audio---------')
     engine.say(text)
     print(text)
     engine.runAndWait()
@@ -61,30 +62,32 @@ def getAudio():
         command=''
         with sr.Microphone() as source:
             # print('---------Calibrating microphone...')
-            # listener.adjust_for_ambient_noise(source,duration=1)
-            print('---------Listening... ')
+            print_val='Calibrating microphone.....'
+            listener.adjust_for_ambient_noise(source)
+            print('Listening... ---------')
             print_val = 'Listening.....'
             voice = listener.listen(source)
-            print('---------audio get from user')
+            print('audio get from user---------')
             try:
                 print_val = 'Recognizing.....'
                 command = listener.recognize_google(voice)
-                print('---------audio recognized')
+                print('audio recognized---------')
                 playsound('../Audios/1_Voice_start.mp3')
                 command = command.lower()
                 print('command-----',command)
             except:
-                if is_internet(bool(False)):
+                if is_internet():
+                    print('unable to understand')
+                    playsound('../Audios/2_Voice_stop.mp3')
+                    print_val = 'unable to understand'
+                else:
                     print_val = 'internet error'
                     print('internet error')
-                else:
-                    print('unable to understand')
-                    print_val = 'unable to understand'
 
     except:
         pass
         print_val = 'Error.....'
-        print('---------error')
+        print('error---------')
 
     return command, print_val
 
@@ -95,7 +98,7 @@ def runCommand():
         song = command.replace('play', '')
         talk('playing' +song)
         print('playing' +song)
-        billie_talk = f"Billie:- playing {song}\n\n"
+        billie_talk = f'Billie:- playing {song}\n\n'
         pywhatkit.playonyt(song)
 
     elif 'time' in command:
@@ -104,7 +107,7 @@ def runCommand():
         billie_talk = f"Billie:- Its {time}\n\n"
 
     elif 'thank you' in command:
-        talk('You are wellcome')
+        talk('You are wellcome.')
         billie_talk = f"Billie:- You are wellcome\n\n"
 
     elif 'who' in command:
@@ -118,14 +121,18 @@ def runCommand():
         talk(info)
         billie_talk = f"Billie:- According to google {info}\n\n"
     else:
-        print('Undefined command')
+        print('Undefined command---------')
         billie_talk = f"Billie:- Undefined command\n\n"
+        playsound('../Audios/2_Voice_stop.mp3')
         # talk('Sorry I couldnt understand it')
         # quit()
 
     return command, billie_talk
 
-
-
+def time_range(start, end, delta):
+    current = start
+    while current < end:
+        yield current
+        current += delta
 # is_internet()
-# getAudio()
+# runCommand()

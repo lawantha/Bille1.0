@@ -1,9 +1,14 @@
 import os
+import time
+from collections import Counter
+
 import cv2
 import numpy as np
 #from Detector import detector
 from keras.preprocessing import image
 import warnings
+
+from Packages.functions import time_range
 
 warnings.filterwarnings("ignore")
 from keras.preprocessing.image import load_img, img_to_array
@@ -19,6 +24,14 @@ face_haar_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_f
 
 # get video from web cam
 cap = cv2.VideoCapture(1)
+start = time.time()
+end = start+60
+print(start,'           ',end)
+
+arr=[]
+time_count=5
+arr_limit=time_count*24
+arr_index=0
 
 #loop for capture all frames
 while True:
@@ -31,6 +44,7 @@ while True:
         cap.release()
         #capture using cv2.CAP_DSHOW (in windows7 opencv could not display video while using third party camera)
         cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+        cap.set(cv2.CAP_PROP_FPS, 24)
         print(cap)
         retv, test_img = cap.read()
 
@@ -40,6 +54,7 @@ while True:
 
     #OpenCV Video I/O API Backend)
     cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
+
 
     # capturing image stops
 
@@ -62,7 +77,7 @@ while True:
         reshape = np.reshape(normalize,(1,48,48,1))
         result = model.predict(reshape)
         label = np.argmax(result, axis=1)[0]
-        print (label)
+        # print (label)
 
 
         # predictions = model.predict(img_pixels)
@@ -77,15 +92,34 @@ while True:
         #model_csv
         emotions = ('anger', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'natural')
         # predicted_emotion = emotions[max_index]
+        # print(emotions[label])
+
+        # dts = [emotions[label] for dt in time_range(start, end, 5)]
+        # print(dts)
+        if len(arr) >= arr_limit:
+            arr[arr_index]=emotions[label]
+            arr_index=(arr_index+1)%arr_limit
+        else:
+            arr.append(emotions[label])
 
         cv2.putText(flip_img, emotions[label], (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
     resized_img = cv2.resize(flip_img, (1000, 700))
+    print(arr)
+    carr = Counter(arr).most_common(1)
+    print(carr)
 
+    # පහෙන්පහට_array_එක_මුල_ඉදන්_යන්නෙ_න_නේ.තියෙන_එකටම_එකතු_වෙවී_යනවා_නේ
+    # තප්පර - දෙකෙන් - දෙකට - වගේ - value - එක - ගන්න - බෑ - ද - අරක - වගේ - colabs
     cv2.imshow('Facial emotion analysis', resized_img)
     if cv2.waitKey(10) == ord('q'):  # wait until 'q' key is pressed
         break
 
-
+print(arr)
+carr=Counter(arr).most_common(1)
+# nparr=np.array(arr)
+# print(nparr)
+# carr=np.argmax(np.bincount(nparr))
+print(carr)
 cap.release()
 cv2.destroyAllWindows

@@ -9,22 +9,27 @@ from PyQt5.QtCore import pyqtSlot, QDate, QTimer, QThread, QDateTime
 from keras.models import load_model
 from pygrabber.dshow_graph import FilterGraph
 
-from Packages.functions import *
+from functions import *
 from UIs.UI_1 import Ui_Billie
 
 UI = Ui_Billie()
+arr=[]
+time_count=10
+arr_limit=time_count*24
+arr_index=0
 
 # print bliies' status
 def print_status(val):
     UI.status_label.setText(val)
 
-
 # print conversation
 def print_convo(val):
     UI.textBrowser.append(f"{val}")
 
+
 class MainThread(QThread):
     print('start')
+
     def __init__(self):
         super(MainThread, self).__init__()
         print('start2')
@@ -33,6 +38,7 @@ class MainThread(QThread):
         self.get_command()
 
     def get_command(self):
+        global command, print_val1
         print('get command')
         try:
             print_status('Listening.....')
@@ -67,6 +73,7 @@ class MainThread(QThread):
 
         else:
             print_status('Undefined.....')
+            playsound('../Audios/2_Voice_stop.mp3')
             print('---------undefined')
         self.get_command()
 
@@ -110,7 +117,9 @@ class MainThread2(QThread):
             if (test_img is None):
                 print("Received empty frame. Exiting")
                 cap.release()
-                # capture using cv2.CAP_DSHOW (in windows7 opencv could not display video while using third party camera)
+
+                # capture using cv2.CAP_DSHOW
+                # (in windows7 opencv could not display video while using third party camera)
                 cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
                 print(cap)
                 retv, test_img = cap.read()
@@ -153,6 +162,16 @@ class MainThread2(QThread):
 
                 UI.mood_lable.setText(emotions[label])
 
+                if len(arr) >= arr_limit:
+                    arr[arr_index] = emotions[label]
+                    arr_index = (arr_index + 1) % arr_limit
+                else:
+                    arr.append(emotions[label])
+
+            # මෙතනින් - value - එක - එලියට -return -කරන්න - බෑ - ද?-loop - එක - ඉවර - වෙන්නේ - නැතුව
+            # එහෙම - නැත්තන් - loop - එක - ඒ - වෙලාවට - පස්සේ - restart - කරොත් -return -කරගන්න - පුළුවන් - නේ?
+
+
             resized_img = cv2.resize(flip_img, (1000, 700))
 
             # get image infos
@@ -167,8 +186,15 @@ class MainThread2(QThread):
         # cv2.destroyAllWindows
 
 
+
 startBillie = MainThread()
 startVideo = MainThread2()
+
+
+def date():
+    dateTime = QDateTime.currentDateTime().toString("yyyy-MM-dd HH:mm:ss")
+    UI.date_label.setText(dateTime)
+    # print(dateTime)
 
 
 class Main(QMainWindow):
@@ -178,25 +204,20 @@ class Main(QMainWindow):
 
         # start
         timer = QTimer(self)
-        timer.timeout.connect(self.date)
+        timer.timeout.connect(date)
         timer.start(1000)
-        # startBillie.start()
-        # startVideo.start()
-        t1 = threading.Thread(target=self.audio)
-        t1.start()
-        t2 = threading.Thread(target=self.video)
-        t2.start()
+        startBillie.start()
+        startVideo.start()
+        # t1 = threading.Thread(target=self.audio)
+        # t1.start()
+        # t2 = threading.Thread(target=self.video)
+        # t2.start()
 
     def audio(self):
         startBillie.start()
 
     def video(self):
         startVideo.start()
-
-    def date(self):
-        dateTime = QDateTime.currentDateTime().toString("yyyy-MM-dd HH:mm:ss")
-        UI.date_label.setText(dateTime)
-        print(dateTime)
 
 
 if __name__ == "__main__":
