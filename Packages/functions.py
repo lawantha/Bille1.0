@@ -83,7 +83,7 @@ def getAudio():
             except:
                 if is_internet():
                     print('unable to understand')
-                    playsound('../Audios/2_Voice_stop.mp3')
+                    # playsound('../Audios/2_Voice_stop.mp3')
                     print_val = 'unable to understand'
                 else:
                     print_val = 'internet error'

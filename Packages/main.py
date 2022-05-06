@@ -72,7 +72,7 @@ class MainThread(QThread):
 
         else:
             print_status('Undefined.....')
-            playsound('../Audios/2_Voice_stop.mp3')
+            # playsound('../Audios/2_Voice_stop.mp3')
             print('---------undefined')
         self.get_command()
 
@@ -199,7 +199,7 @@ class Array(QThread):
         self.array()
 
     def array(selfe):
-        arr2_limit=400000
+        arr2_limit=400000000
 
         while True:
             carr_ar = [word for word, word_count in Counter(arr).most_common(1)]
@@ -233,7 +233,7 @@ class Main(QMainWindow):
         timer.start(1000)
         startBillie.start()
         startVideo.start()
-        # startArray.start()
+        startArray.start()
         # t1 = threading.Thread(target=self.audio)
         # t1.start()
         # t2 = threading.Thread(target=self.video)
