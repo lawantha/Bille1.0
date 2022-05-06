@@ -1,3 +1,4 @@
+import random
 import sys
 import threading
 from collections import Counter
@@ -16,6 +17,7 @@ from UIs.UI_1 import Ui_Billie
 UI = Ui_Billie()
 arr=['Recognizing...']
 arr2=['Recognizing...']
+billie_say=['hello. what can i do for you', 'hey', 'hey. how are you', 'yes ', 'hello']
 cap = cv2.VideoCapture(1)
 # print bliies' status
 def print_status(val):
@@ -62,8 +64,9 @@ class MainThread(QThread):
 
             print_convo(f'You:- {command}')
             print_status('Talking.....')
-            print_convo('\nBillie:- Hello. what can I do for you?\n')
-            talk('Hello. what can I do for you?')
+            get_billie_say=random.choice(billie_say)
+            print_convo(f'\nBillie:- {get_billie_say}\n')
+            talk(get_billie_say)
 
             print_status('Listening.....')
             command, print_val2 = runCommand()
