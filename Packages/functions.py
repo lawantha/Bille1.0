@@ -1,6 +1,7 @@
 import fnmatch
 import os,random
 import subprocess
+import threading
 import urllib
 from datetime import datetime
 # import pyaudio
@@ -67,7 +68,7 @@ def getAudio():
         with sr.Microphone() as source:
             print('---------Calibrating microphone... ---------')
             print_val='Calibrating microphone.....'
-            listener.adjust_for_ambient_noise(source)
+            listener.adjust_for_ambient_noise(source,1)
             print('Listening... ---------')
             print_val = 'Listening.....'
             voice = listener.listen(source)
@@ -152,9 +153,16 @@ def youtube(song):
     pywhatkit.playonyt(song)
 
 
+def get_mood(mood):
+    moodd=mood
+    mood(moodd)
+    print('mooooooood')
+    # t1=threading.Thread(target=mood(mood))
+    # t1.start()
+
 def mood(mood):
     mood=mood
-
+    print('mood--------',mood)
     if mood == 'Recognizing...':
         print('')
     else:

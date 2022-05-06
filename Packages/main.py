@@ -16,6 +16,7 @@ from UIs.UI_1 import Ui_Billie
 UI = Ui_Billie()
 arr=['Recognizing...']
 arr2=['Recognizing...']
+cap = cv2.VideoCapture(1)
 # print bliies' status
 def print_status(val):
     UI.status_label.setText(val)
@@ -97,7 +98,7 @@ class MainThread2(QThread):
         print("Current index",i,"selection changed ",UI.comboBox.currentText())
 
     def emotion_detection(self):
-        arr_limit = 10
+        arr_limit = 100
         arr_index = 0
         # load model
         model = load_model('../Models/trained_model_csv.h5')
@@ -186,7 +187,7 @@ class MainThread2(QThread):
 def date():
     dateTime = QDateTime.currentDateTime().toString("yyyy-MM-dd HH:mm:ss")
     UI.date_label.setText(dateTime)
-    # print(dateTime)
+    print(dateTime)
 
 class Array(QThread):
 
@@ -198,7 +199,7 @@ class Array(QThread):
         self.array()
 
     def array(selfe):
-        arr2_limit=2000
+        arr2_limit=400000
 
         while True:
             carr_ar = [word for word, word_count in Counter(arr).most_common(1)]
@@ -209,12 +210,12 @@ class Array(QThread):
             if len(arr2) >= arr2_limit:
                 carr_ar = [word for word, word_count in Counter(arr2).most_common(1)]
                 carr2 = carr_ar[0]
+                print('b')
                 # print('----------',carr2)
                 mood(carr2)
                 arr2.clear()
             else:
                 arr2.append(carr)
-                print('a')
 
 
 startBillie = MainThread()
@@ -232,7 +233,7 @@ class Main(QMainWindow):
         timer.start(1000)
         startBillie.start()
         startVideo.start()
-        startArray.start()
+        # startArray.start()
         # t1 = threading.Thread(target=self.audio)
         # t1.start()
         # t2 = threading.Thread(target=self.video)

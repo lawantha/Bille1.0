@@ -30,12 +30,12 @@ end = start+60
 print(start,'           ',end)
 
 arr=[]
-arr_limit = 10
-arr_index = 0
 
 
 #loop for capture all frames
 def cam():
+    arr_limit = 10
+    arr_index = 0
     cap = cv2.VideoCapture(1)
     time_count = 5
     while True:
@@ -102,13 +102,12 @@ def cam():
             # dts = [emotions[label] for dt in time_range(start, end, 5)]
             # print(dts)
             # print(emotions[label])
-            emo= emotions[label]
 
             if len(arr) >= arr_limit:
-                arr[arr_index]=emo
+                arr[arr_index]=emotions[label]
                 arr_index=(arr_index+1)%arr_limit
             else:
-                arr.append(emo)
+                arr.append(emotions[label])
 
             cv2.putText(flip_img, emotions[label], (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
