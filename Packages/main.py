@@ -1,5 +1,6 @@
 import sys
 import threading
+from collections import Counter
 
 import cv2
 import numpy as np
@@ -13,11 +14,8 @@ from functions import *
 from UIs.UI_1 import Ui_Billie
 
 UI = Ui_Billie()
-arr=[]
-time_count=10
-arr_limit=time_count*24
-arr_index=0
-
+arr=['Recognizing...']
+arr2=['Recognizing...']
 # print bliies' status
 def print_status(val):
     UI.status_label.setText(val)
@@ -99,6 +97,8 @@ class MainThread2(QThread):
         print("Current index",i,"selection changed ",UI.comboBox.currentText())
 
     def emotion_detection(self):
+        arr_limit = 10
+        arr_index = 0
         # load model
         model = load_model('../Models/trained_model_csv.h5')
 
@@ -160,16 +160,13 @@ class MainThread2(QThread):
 
                 cv2.putText(flip_img, emotions[label], (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
-                UI.mood_lable.setText(emotions[label])
+                # UI.mood_lable.setText(emotions[label])
 
                 if len(arr) >= arr_limit:
                     arr[arr_index] = emotions[label]
                     arr_index = (arr_index + 1) % arr_limit
                 else:
                     arr.append(emotions[label])
-
-            # මෙතනින් - value - එක - එලියට -return -කරන්න - බෑ - ද?-loop - එක - ඉවර - වෙන්නේ - නැතුව
-            # එහෙම - නැත්තන් - loop - එක - ඒ - වෙලාවට - පස්සේ - restart - කරොත් -return -කරගන්න - පුළුවන් - නේ?
 
 
             resized_img = cv2.resize(flip_img, (1000, 700))
@@ -186,16 +183,43 @@ class MainThread2(QThread):
         # cv2.destroyAllWindows
 
 
-
-startBillie = MainThread()
-startVideo = MainThread2()
-
-
 def date():
     dateTime = QDateTime.currentDateTime().toString("yyyy-MM-dd HH:mm:ss")
     UI.date_label.setText(dateTime)
     # print(dateTime)
 
+class Array(QThread):
+
+    def __init__(self):
+        super(Array, self).__init__()
+        print('open array')
+
+    def run(self):
+        self.array()
+
+    def array(selfe):
+        arr2_limit=2000
+
+        while True:
+            carr_ar = [word for word, word_count in Counter(arr).most_common(1)]
+            carr=carr_ar[0]
+            UI.mood_lable.setText(carr)
+            # print(carr)
+
+            if len(arr2) >= arr2_limit:
+                carr_ar = [word for word, word_count in Counter(arr2).most_common(1)]
+                carr2 = carr_ar[0]
+                # print('----------',carr2)
+                mood(carr2)
+                arr2.clear()
+            else:
+                arr2.append(carr)
+                print('a')
+
+
+startBillie = MainThread()
+startVideo = MainThread2()
+startArray = Array()
 
 class Main(QMainWindow):
     def __init__(self):
@@ -208,6 +232,7 @@ class Main(QMainWindow):
         timer.start(1000)
         startBillie.start()
         startVideo.start()
+        startArray.start()
         # t1 = threading.Thread(target=self.audio)
         # t1.start()
         # t2 = threading.Thread(target=self.video)

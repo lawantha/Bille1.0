@@ -1,6 +1,10 @@
+import fnmatch
+import os,random
+import subprocess
 import urllib
 from datetime import datetime
 # import pyaudio
+
 import pyttsx3
 import pywhatkit
 # from urllib.request import urlretrieve
@@ -61,7 +65,7 @@ def getAudio():
     try:
         command=''
         with sr.Microphone() as source:
-            # print('---------Calibrating microphone...')
+            print('---------Calibrating microphone... ---------')
             print_val='Calibrating microphone.....'
             listener.adjust_for_ambient_noise(source)
             print('Listening... ---------')
@@ -94,14 +98,7 @@ def getAudio():
 billie_talk = 'None'
 def runCommand():
     command, val = getAudio()
-    if 'play' in command:
-        song = command.replace('play', '')
-        talk('playing' +song)
-        print('playing' +song)
-        billie_talk = f'Billie:- playing {song}\n\n'
-        pywhatkit.playonyt(song)
-
-    elif 'time' in command:
+    if 'time' in command:
         time = datetime.now().strftime('%I:%M %p')
         talk('Its ' + time)
         billie_talk = f"Billie:- Its {time}\n\n"
@@ -110,7 +107,7 @@ def runCommand():
         talk('You are wellcome.')
         billie_talk = f"Billie:- You are wellcome\n\n"
 
-    elif 'who' in command:
+    elif 'who is' in command:
         person = command.replace('who is', '')
         person = command.replace('tell me who is', '')
         print('serching for '+ person)
@@ -119,7 +116,20 @@ def runCommand():
         info = wikipedia.summary(person, 2)
         print(info)
         talk(info)
-        billie_talk = f"Billie:- According to google {info}\n\n"
+        billie_talk = f"Billie:- According to wikipedia {info}\n\n"
+
+    elif 'play music' in command or 'play song' in command or 'play a song'in command:
+        talk('playing music on windows midea player ')
+        billie_talk = f"Billie:- Playing music on windows midea player\n\n"
+        play_music()
+
+    elif 'play' in command:
+        song = command.replace('play', '')
+        talk('playing' +song+' in you tube')
+        print('playing' +song+' in you tube')
+        billie_talk = f'Billie:- playing {song}\n\n'
+        youtube(song)
+
     else:
         print('Undefined command---------')
         billie_talk = f"Billie:- Undefined command\n\n"
@@ -129,6 +139,38 @@ def runCommand():
 
     return command, billie_talk
 
+def play_music():
+    # mp = 'C:/Program Files (x86)/Windows Media Player/wmplayer.exe'
+    music_dir = 'C:/Users/user/Music/ENGLISH/'
+    randome=random.choice(fnmatch.filter(os.listdir(music_dir),'*.mp3'))
+    file=(music_dir+randome)
+    print(file)
+    # subprocess.call([mp, file])
+    os.startfile(os.path.join(music_dir, file))
+
+def youtube(song):
+    pywhatkit.playonyt(song)
+
+
+def mood(mood):
+    mood=mood
+
+    if mood == 'Recognizing...':
+        print('')
+    else:
+        talk('Its time to break')
+        if mood == 'sad' or mood == 'anger' or mood == 'disgust':
+            talk('Its seems you are in sad. It s better to have a small break. Let me play a song for you')
+            youtube('relax music/ relax songs')
+            # do you need to hear a jock
+            print('mood------',mood)
+        elif mood == 'happy' or mood == 'natural':
+            talk('Did you know that staring at a computer screen for more than twenty minutes is bad for your eyes?')
+
+
+def selct_music_path():
+    return None
+
 def time_range(start, end, delta):
     current = start
     while current < end:
@@ -136,3 +178,4 @@ def time_range(start, end, delta):
         current += delta
 # is_internet()
 # runCommand()
+# play_music()
