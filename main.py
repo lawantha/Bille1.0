@@ -113,7 +113,7 @@ class MainThread2(QThread):
         model = load_model('Models/trained_model_csv.h5')
 
         # cascade file for face detection
-        face_haar_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+        face_haar_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
         # get video from web cam
         cap = cv2.VideoCapture(cam_id)
