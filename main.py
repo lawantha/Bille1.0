@@ -1,5 +1,6 @@
 import random
 import sys
+sys.path.append('venv/Lib/site-packages')
 import socket
 import threading
 from collections import Counter
@@ -12,13 +13,13 @@ from PyQt5.QtCore import pyqtSlot, QDate, QTimer, QThread, QDateTime
 from keras.models import load_model
 from pygrabber.dshow_graph import FilterGraph
 
-from functions import *
+from Packages.functions import *
 from UIs.UI_1 import Ui_Billie
 
 UI = Ui_Billie()
 arr=['Recognizing...']
 arr2=['Recognizing...']
-billie_say=['hello. what can i do for you', 'hey', 'hey. how are you', 'yes ', 'hello']
+billie_say=['hello. what can i do for you', 'hey', 'hey. how are you', 'hello. how are you']
 
 cap = cv2.VideoCapture(1)
 # print bliies' status
@@ -62,7 +63,7 @@ class MainThread(QThread):
 
         print('------',command)
 
-        if 'billi' in command:
+        if 'billi' in command or 'Billi' in command or 'billy' in command:
 
             print_convo(f'You:- {command}')
             print_status('Talking.....')
@@ -77,7 +78,7 @@ class MainThread(QThread):
 
         else:
             print_status('Undefined.....')
-            # playsound('../Audios/2_Voice_stop.mp3')
+            # playsound('Audios/2_Voice_stop.mp3')
             print('---------undefined')
         self.get_command()
 
@@ -104,10 +105,10 @@ class MainThread2(QThread):
         print("Current index",i,"selection changed ",UI.comboBox.currentText())
 
     def emotion_detection(self,cam_id):
-        arr_limit = 100
+        arr_limit = 50
         arr_index = 0
         # load model
-        model = load_model('../Models/trained_model_csv.h5')
+        model = load_model('Models/trained_model_csv.h5')
 
         # cascade file for face detection
         face_haar_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -251,9 +252,12 @@ class Main(QMainWindow):
         startBillie.start()
         startArray.start()
 
-        UI.movie = QMovie('../img/block_1.gif')
+        UI.movie = QMovie('img/block_1.gif')
         UI.gif1.setMovie(UI.movie)
         UI.movie.start()
+
+        UI.main_img.setPixmap(QPixmap("img/background.jpg"))
+
 
         # t1 = threading.Thread(target=self.audio)
         # t1.start()

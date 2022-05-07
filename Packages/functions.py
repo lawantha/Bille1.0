@@ -1,3 +1,5 @@
+import sys
+sys.path.append('venv/Lib/site-packages')
 import fnmatch
 import os,random
 import subprocess
@@ -58,7 +60,7 @@ def talk(text):
     print(text)
     engine.runAndWait()
     print('run and wait')
-    playsound('../Audios/2_Voice_stop.mp3')
+    playsound('Audios/2_Voice_stop.mp3')
 
 
 #audio to text
@@ -77,13 +79,13 @@ def getAudio():
                 print_val = 'Recognizing.....'
                 command = listener.recognize_google(voice)
                 print('audio recognized---------')
-                playsound('../Audios/1_Voice_start.mp3')
+                playsound('Audios/1_Voice_start.mp3')
                 command = command.lower()
                 print('command-----',command)
             except:
                 if is_internet():
                     print('unable to understand')
-                    # playsound('../Audios/2_Voice_stop.mp3')
+                    # playsound('Audios/2_Voice_stop.mp3')
                     print_val = 'unable to understand'
                 else:
                     print_val = 'internet error'
@@ -134,7 +136,7 @@ def runCommand():
     else:
         print('Undefined command---------')
         billie_talk = f"Billie:- Undefined command\n\n"
-        playsound('../Audios/2_Voice_stop.mp3')
+        playsound('Audios/2_Voice_stop.mp3')
         # talk('Sorry I couldnt understand it')
         # quit()
 
