@@ -1,11 +1,12 @@
 import random
 import sys
+import socket
 import threading
 from collections import Counter
 
 import cv2
 import numpy as np
-from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtGui import QImage, QPixmap, QMovie
 from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow
 from PyQt5.QtCore import pyqtSlot, QDate, QTimer, QThread, QDateTime
 from keras.models import load_model
@@ -18,6 +19,7 @@ UI = Ui_Billie()
 arr=['Recognizing...']
 arr2=['Recognizing...']
 billie_say=['hello. what can i do for you', 'hey', 'hey. how are you', 'yes ', 'hello']
+
 cap = cv2.VideoCapture(1)
 # print bliies' status
 def print_status(val):
@@ -88,11 +90,12 @@ class MainThread2(QThread):
     def run(self):
         # a = threading.Thread(target=self.emotion_detection)
         # a.start()
-        self.emotion_detection()
         graph = FilterGraph()
-        UI.comboBox.addItems(graph.get_input_devices())
         print(graph.get_input_devices())
+        UI.comboBox.addItems(graph.get_input_devices())
         UI.comboBox.currentIndexChanged.connect(self.selectionchange)
+        i=UI.comboBox.currentIndex()
+        self.emotion_detection(i)
 
 
     # select camera
@@ -100,7 +103,7 @@ class MainThread2(QThread):
         i=UI.comboBox.currentIndex()
         print("Current index",i,"selection changed ",UI.comboBox.currentText())
 
-    def emotion_detection(self):
+    def emotion_detection(self,cam_id):
         arr_limit = 100
         arr_index = 0
         # load model
@@ -110,28 +113,33 @@ class MainThread2(QThread):
         face_haar_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
         # get video from web cam
-        cap = cv2.VideoCapture(1)
+        cap = cv2.VideoCapture(cam_id)
 
         # loop for capture all frames
         while True:
+            i = UI.comboBox.currentIndex()
+            # print('cam--',i)
             # captures frame and returns boolean value and captured image start
             retv, test_img = cap.read()
 
             # check that the frame is empty
             if (test_img is None):
-                print("Received empty frame. Exiting")
-                cap.release()
+                print("Camera Changed")
 
                 # capture using cv2.CAP_DSHOW
                 # (in windows7 opencv could not display video while using third party camera)
-                cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
-                print(cap)
+                cap = cv2.VideoCapture(i)
                 retv, test_img = cap.read()
-
+                print(cap)
+                if (test_img is None):
+                    print("Received empty frame. Exiting")
+                    cap.release()
+                    cap = cv2.VideoCapture(i, cv2.CAP_DSHOW)
+                    retv, test_img = cap.read()
+                    print(cap)
             cv2.normalize(test_img, test_img, 0, 255, cv2.NORM_MINMAX)
             # cap.set(cv2.CAP_PROP_FRAME_WIDTH, 700)
             # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 700)
-
             # OpenCV Video I/O API Backend)
             cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
 
@@ -183,14 +191,18 @@ class MainThread2(QThread):
             # show image in label
             UI.video_label.setPixmap(QPixmap.fromImage(qImg))
 
-        # cap.release()
+            if i != cam_id:
+                print(i,cam_id)
+                cam_id=i
+                cap.release()
+        # print('cap relese')
         # cv2.destroyAllWindows
 
 
 def date():
     dateTime = QDateTime.currentDateTime().toString("yyyy-MM-dd HH:mm:ss")
     UI.date_label.setText(dateTime)
-    print(dateTime)
+    # print(dateTime)
 
 class Array(QThread):
 
@@ -234,9 +246,15 @@ class Main(QMainWindow):
         timer = QTimer(self)
         timer.timeout.connect(date)
         timer.start(1000)
-        startBillie.start()
+        UI.name_lable.setText(socket.gethostname())
         startVideo.start()
+        startBillie.start()
         startArray.start()
+
+        UI.movie = QMovie('../img/block_1.gif')
+        UI.gif1.setMovie(UI.movie)
+        UI.movie.start()
+
         # t1 = threading.Thread(target=self.audio)
         # t1.start()
         # t2 = threading.Thread(target=self.video)
