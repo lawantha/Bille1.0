@@ -1,5 +1,7 @@
 import random
 import sys
+import time
+
 sys.path.append('venv/Lib/site-packages')
 import socket
 import threading
@@ -216,19 +218,24 @@ class Array(QThread):
 
     def array(selfe):
         arr2_limit=400000000
+        start_time = time.time()
+        seconds = 10
 
         while True:
             carr_ar = [word for word, word_count in Counter(arr).most_common(1)]
             carr=carr_ar[0]
             UI.mood_lable.setText(carr)
+            current_time = time.time()
+            elapsed_time = current_time - start_time
             # print(carr)
 
-            if len(arr2) >= arr2_limit:
+            if elapsed_time > seconds:
                 carr_ar = [word for word, word_count in Counter(arr2).most_common(1)]
                 carr2 = carr_ar[0]
                 print('b')
                 # print('----------',carr2)
                 mood(carr2)
+                start_time = time.time()
                 arr2.clear()
             else:
                 arr2.append(carr)
