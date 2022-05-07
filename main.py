@@ -219,7 +219,7 @@ class Array(QThread):
     def array(selfe):
         arr2_limit=400000000
         start_time = time.time()
-        seconds = 10
+        seconds = 20*60
 
         while True:
             carr_ar = [word for word, word_count in Counter(arr).most_common(1)]
@@ -233,7 +233,6 @@ class Array(QThread):
                 carr_ar = [word for word, word_count in Counter(arr2).most_common(1)]
                 carr2 = carr_ar[0]
                 print('b')
-                # print('----------',carr2)
                 mood(carr2)
                 start_time = time.time()
                 arr2.clear()
