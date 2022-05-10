@@ -21,7 +21,7 @@ from UIs.UI_1 import Ui_Billie
 UI = Ui_Billie()
 arr=['Recognizing...']
 arr2=['Recognizing...']
-billie_say=['hello. what can i do for you', 'hey', 'hey. how are you', 'hello. how are you']
+billie_say=['hello. what can i do for you', 'hey', 'hello', 'hey', 'hello', 'hey. how are you']
 
 cap = cv2.VideoCapture(1)
 # print bliies' status
@@ -81,10 +81,6 @@ class MainThread(QThread):
         else:
             if is_internet():
                 print('Undefined command---------')
-                billie_talk = f"Billie:- Undefined command\n\n"
-                playsound('Audios/2_Voice_stop.mp3')
-                # talk('Sorry I couldnt understand it')
-                # quit()
             else:
                 print_convo('\n----------internet error. please check your internet connection\n')
                 print_status('internet error....')
