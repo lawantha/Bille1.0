@@ -120,11 +120,11 @@ def runCommand():
         if is_internet():
             print('Undefined command---------')
             billie_talk = f"Billie:- Undefined command\n\n"
-            playsound('Audios/2_Voice_stop.mp3')
-            # talk('Sorry I couldnt understand it')
+            talk('Sorry I couldnt understand it')
             # quit()
         else:
             billie_talk = '\n----------internet error. please check your internet connection\n'
+            playsound('Audios/2_Voice_stop.mp3')
 
 
     return command, billie_talk
