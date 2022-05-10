@@ -25,6 +25,7 @@ engine.setProperty('rate', 150)
 
 billie_talk = 'None'
 
+
 # check for internet
 def is_internet():
     try:
@@ -34,6 +35,7 @@ def is_internet():
     except urllib.request.URLError:
         print('---------internet error_function')
         return False
+
 
 #convert text to audio
 def talk(text):
@@ -82,6 +84,7 @@ def getAudio():
     return command, print_val
 
 
+#execute commands
 def runCommand():
     command, val= getAudio()
     if 'time' in command:
@@ -129,6 +132,7 @@ def runCommand():
 
     return command, billie_talk
 
+
 def play_music():
     # mp = 'C:/Program Files (x86)/Windows Media Player/wmplayer.exe'
     music_dir = 'C:/Users/user/Music/ENGLISH/'
@@ -138,11 +142,11 @@ def play_music():
     # subprocess.call([mp, file])
     os.startfile(os.path.join(music_dir, file))
 
+
 def youtube(song):
     if is_internet():
         import pywhatkit
         pywhatkit.playonyt(song)
-
 
 
 def get_mood(mood):
@@ -151,6 +155,7 @@ def get_mood(mood):
     print('mooooooood')
     # t1=threading.Thread(target=mood(mood))
     # t1.start()
+
 
 def mood(mood):
     mood=mood
@@ -171,11 +176,13 @@ def mood(mood):
 def selct_music_path():
     return None
 
+
 def time_range(start, end, delta):
     current = start
     while current < end:
         yield current
         current += delta
+
 # is_internet()
 # runCommand()
 # play_music()

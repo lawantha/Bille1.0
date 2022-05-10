@@ -32,7 +32,7 @@ def print_status(val):
 def print_convo(val):
     UI.textBrowser.append(f"{val}")
 
-
+#Billie voice recognition, reaction system
 class MainThread(QThread):
     print('start')
 
@@ -43,6 +43,7 @@ class MainThread(QThread):
     def run(self):
         self.get_command()
 
+    #get commands from user
     def get_command(self):
         global command, print_val1
         print('get command')
@@ -61,6 +62,7 @@ class MainThread(QThread):
         self.execute_command(command, print_val1)
         return command
 
+    #execute commands
     def execute_command(self, command, print_vall):
         print('execute command')
 
@@ -87,7 +89,7 @@ class MainThread(QThread):
                 print_status('internet error....')
         self.get_command()
 
-
+#emotion detecting and reaction system
 class MainThread2(QThread):
     def __init__(self):
         super(MainThread2, self).__init__()
@@ -210,6 +212,7 @@ def date():
     UI.date_label.setText(dateTime)
     # print(dateTime)
 
+#array for hold recognized emotions
 class Array(QThread):
 
     def __init__(self):
@@ -261,6 +264,7 @@ class Main(QMainWindow):
         startBillie.start()
         startArray.start()
 
+        #update user interface
         UI.movie = QMovie('img/block_1.gif')
         UI.gif1.setMovie(UI.movie)
         UI.movie.start()
