@@ -281,7 +281,7 @@ font: 75 14pt &quot;MS Shell Dlg 2&quot;;</string>
      <rect>
       <x>10</x>
       <y>400</y>
-      <width>471</width>
+      <width>151</width>
       <height>39</height>
      </rect>
     </property>
@@ -347,6 +347,32 @@ font: 75 14pt &quot;MS Shell Dlg 2&quot;;</string>
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QLabel" name="last_command">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>400</y>
+      <width>251</width>
+      <height>39</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+   </widget>
    <zorder>main_img</zorder>
    <zorder>gif1</zorder>
    <zorder>label_9</zorder>
@@ -359,6 +385,7 @@ font: 75 14pt &quot;MS Shell Dlg 2&quot;;</string>
    <zorder>comboBox</zorder>
    <zorder>status_label</zorder>
    <zorder>camchange_label</zorder>
+   <zorder>last_command</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

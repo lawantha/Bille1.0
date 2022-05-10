@@ -51,6 +51,7 @@ class MainThread(QThread):
 
             command, print_val1 = getAudio()
             print_status(print_val1)
+            UI.last_command.setText(f'wake up command you said = {command}')
             print(command,'   ',print_val1)
 
         except:
