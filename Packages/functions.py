@@ -1,5 +1,5 @@
 import sys
-sys.path.append('venv/Lib/site-packages')
+sys.path.append('../venv/Lib/site-packages')
 import fnmatch
 import os,random
 import subprocess
@@ -9,7 +9,6 @@ from datetime import datetime
 # import pyaudio
 
 import pyttsx3
-import pywhatkit
 # from urllib.request import urlretrieve
 import speech_recognition as sr
 import wikipedia
@@ -21,10 +20,12 @@ voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
 engine.setProperty('rate', 150)
 
-# check for internet
+
 # from numpy.lib.utils import source
 
+billie_talk = 'None'
 
+# check for internet
 def is_internet():
     try:
         urllib.request.urlopen('https://google.com', timeout=1)
@@ -33,25 +34,6 @@ def is_internet():
     except urllib.request.URLError:
         print('---------internet error_function')
         return False
-is_internet()
-# if is_internet():
-#     import speech_recognition as sr
-#     import pyttsx3
-#     import pywhatkit
-#     import datetime
-#     import wikipedia
-#     from playsound import playsound
-#     from gtts import gTTS
-#
-#     listener = sr.Recognizer()
-#     engine = pyttsx3.init(driverName='sapi5')
-#     voices = engine.getProperty('voices')
-#     engine.setProperty('voice', voices[0].id)
-#     engine.setProperty('rate', 150)
-#     print('---------internet connected')
-# else:
-#     print('unable to connect internet')
-
 
 #convert text to audio
 def talk(text):
@@ -79,9 +61,9 @@ def getAudio():
                 print_val = 'Recognizing.....'
                 command = listener.recognize_google(voice)
                 print('audio recognized---------')
-                playsound('Audios/1_Voice_start.mp3')
+                # playsound('Audios/1_Voice_start.mp3')
                 command = command.lower()
-                print('command-----',command)
+                print('recognized audio = ',command)
             except:
                 if is_internet():
                     print('unable to understand')
@@ -89,18 +71,19 @@ def getAudio():
                     print_val = 'unable to understand'
                 else:
                     print_val = 'internet error'
-                    print('internet error')
+                    billie_talk = '\n----------internet error. please check your internet connection\n'
+                    # print('internet error')
 
     except:
         pass
         print_val = 'Error.....'
-        print('error---------')
+        print('error1')
 
     return command, print_val
 
-billie_talk = 'None'
+
 def runCommand():
-    command, val = getAudio()
+    command, val= getAudio()
     if 'time' in command:
         time = datetime.now().strftime('%I:%M %p')
         talk('Its ' + time)
@@ -134,11 +117,15 @@ def runCommand():
         youtube(song)
 
     else:
-        print('Undefined command---------')
-        billie_talk = f"Billie:- Undefined command\n\n"
-        playsound('Audios/2_Voice_stop.mp3')
-        # talk('Sorry I couldnt understand it')
-        # quit()
+        if is_internet():
+            print('Undefined command---------')
+            billie_talk = f"Billie:- Undefined command\n\n"
+            playsound('Audios/2_Voice_stop.mp3')
+            # talk('Sorry I couldnt understand it')
+            # quit()
+        else:
+            billie_talk = '\n----------internet error. please check your internet connection\n'
+
 
     return command, billie_talk
 
@@ -152,7 +139,10 @@ def play_music():
     os.startfile(os.path.join(music_dir, file))
 
 def youtube(song):
-    pywhatkit.playonyt(song)
+    if is_internet():
+        import pywhatkit
+        pywhatkit.playonyt(song)
+
 
 
 def get_mood(mood):

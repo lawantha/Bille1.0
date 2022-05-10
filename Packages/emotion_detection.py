@@ -20,7 +20,7 @@ from keras.models import  load_model
 model = load_model('../Models/trained_model_csv.h5')
 
 # cascade file for face detection
-face_haar_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+face_haar_cascade = cv2.CascadeClassifier('../haarcascade_frontalface_default.xml')
 
 
 # get video from web cam
@@ -36,7 +36,7 @@ arr=[]
 def cam():
     arr_limit = 10
     arr_index = 0
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture('../emotions.mp4')
     time_count = 5
     while True:
         # captures frame and returns boolean value and captured image start
@@ -130,7 +130,7 @@ def cam():
     # carr=np.argmax(np.bincount(nparr))
     print(carr)
     cap.release()
-    cv2.destroyAllWindows
+    cv2.destroyAllWindows()
 
 def array():
     while True:
@@ -147,8 +147,11 @@ def array():
 #     time.sleep(10)
 #     array()
 
+import socket
 if __name__ == '__main__':
     threading.Thread(target = cam).start()
-    threading.Thread(target = array).start()
+    # threading.Thread(target = array).start()
+    print(socket.gethostname())
+    
 
 

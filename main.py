@@ -79,9 +79,15 @@ class MainThread(QThread):
             print_convo(print_val2)
 
         else:
-            print_status('Undefined.....')
-            # playsound('Audios/2_Voice_stop.mp3')
-            print('---------undefined')
+            if is_internet():
+                print('Undefined command---------')
+                billie_talk = f"Billie:- Undefined command\n\n"
+                playsound('Audios/2_Voice_stop.mp3')
+                # talk('Sorry I couldnt understand it')
+                # quit()
+            else:
+                print_convo('\n----------internet error. please check your internet connection\n')
+                print_status('internet error....')
         self.get_command()
 
 
